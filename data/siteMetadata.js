@@ -1,9 +1,10 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Next.js Starter Blog',
-  author: 'Tails Azimuth',
-  headerTitle: 'TailwindBlog',
-  description: 'A blog created with Next.js and Tailwind.css',
+  title: `Dhiraj Das`,
+  author: 'Dhiraj Das',
+  headerTitle: 'Dhiraj Das',
+  description:
+    'Random thoughts about software development, data, personal finance and life in general.',
   language: 'en-us',
   theme: 'system', // system, dark or light
   siteUrl: 'https://tailwind-nextjs-starter-blog.vercel.app',
@@ -11,12 +12,12 @@ const siteMetadata = {
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
   mastodon: 'https://mastodon.social/@mastodonuser',
-  email: 'address@yoursite.com',
-  github: 'https://github.com',
-  twitter: 'https://twitter.com/Twitter',
+  email: 'dhiraj.das.05@gmail.com',
+  github: 'https://github.com/dhiraj-das',
+  twitter: 'https://twitter.com/',
   facebook: 'https://facebook.com',
   youtube: 'https://youtube.com',
-  linkedin: 'https://www.linkedin.com',
+  linkedin: 'https://www.linkedin.com/in/dhiraj-das',
   threads: 'https://www.threads.net',
   instagram: 'https://www.instagram.com',
   locale: 'en-US',
