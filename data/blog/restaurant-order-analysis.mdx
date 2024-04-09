@@ -1,0 +1,177 @@
+---
+title: 'Restaurant Order Analysis'
+date: '2024-04-09'
+lastmod: '2024-04-09'
+tags: ['sql', 'data-analysis']
+draft: false
+summary: 'An analysis on restaurant orders conducted by using MySQL to analyze order data and identify the most and least popular menu items and types of cuisine'
+---
+
+## Introduction
+
+This is my solution to a project by Maven Analytics. A dataset consisting of a quarter's worth of orders from a fictitious international cuisine restaurant. The challenge was to analyse the menu items and the order details and understand the customer behavior.
+
+## The Tools and Dataset
+
+- [MySQL Workbench Community Edition](https://www.mysql.com/products/workbench/) - One of the most commonly used tool to connect to a MySQL server. Its free and works on my mac hence I use it.
+- [Aiven](https://aiven.io/) - A cloud platform that lets users host one instance of a MySQL, PostgreSQL, and Redis each for free. I am running out space on my laptop so I used Aiven to create the database on their servers and connect to it over the internet.
+- [Dataset](https://github.com/dhiraj-das/restaurant-orders-analysis/blob/main/create_restaurant_db.sql) - The Maven Analytics platform came with a data dictionary and a SQL script to create the database. The same was used to create the db schema and neccessary tables.
+
+## Objective 1 - Explore the items table
+
+The first objective was to better understand the items table by finding the number of rows in the table, the least and most expensive items, and the item prices within each category. Here are the tasks -
+
+- View the menu_items table and write a query to find the number of items on the menu
+
+```sql
+select count(*) 
+from menu_items;
+```
+
+- What are the least and most expensive items on the menu?
+
+```sql
+select 
+	min(price) as least_expensive,
+    max(price) as most_expensive
+from 
+menu_items;
+```
+
+- How many Italian dishes are on the menu? What are the least and most expensive Italian dishes on the menu?
+
+```sql
+select
+	category,
+    count(*),
+	min(price) as least_expensive,
+    max(price) as most_expensive
+from menu_items
+group by category;
+```
+
+- How many dishes are in each category? What is the average dish price within each category?
+
+```sql
+select
+	category,
+    count(*),
+	avg(price) as avg_price
+from menu_items
+group by category;
+```
+
+## Objective 2 - Explore the orders table
+
+The second objective was to better understand the orders table by finding the date range, the number of items within each order, and the orders with the highest number of items.
+
+- View the order_details table. What is the date range of the table?
+
+```sql
+select * from order_details;
+
+select 
+	min(order_date) as min_date,
+    max(order_date) as max_date
+from order_details;
+```
+
+- How many orders were made within this date range? How many items were ordered within this date range?
+
+```sql
+select 
+    count(distinct order_id) as order_count, 
+    count(item_id) as item_count
+from order_details;
+```
+
+- Which orders had the most number of items?
+
+```sql
+select
+	order_id,
+    count(item_id) as item_count
+from order_details
+group by 1
+order by count(item_id) desc;
+```
+
+- How many orders had more than 12 items?
+
+```sql
+select
+	order_id,
+    count(item_id) as item_count
+from order_details
+group by 1
+having count(item_id) > 12
+```
+
+## Objective 3 - Analyze customer behavior
+
+The final objective was to combine the items and orders tables, find the least and most ordered categories, and dive into the details of the highest spend orders.
+
+- Combine the menu_items and order_details tables into a single table
+
+```sql
+select *
+from order_details a
+left join menu_items b
+on a.item_id = b.menu_item_id;
+```
+
+- What were the least and most ordered items? What categories were they in?
+
+```sql
+select 
+	item_name,
+    category,
+    count(menu_item_id) as item_count
+from order_details a
+inner join menu_items b
+on a.item_id = b.menu_item_id
+group by item_name, category
+order by item_count;
+```
+
+- What were the top 5 orders that spent the most money?
+
+```sql
+select
+	order_id,
+    sum(price)
+from order_details a
+left join menu_items b
+on a.item_id = b.menu_item_id
+group by 1
+order by 2 desc
+limit 5;
+```
+
+- View the details of the highest spend order. Which specific items were purchased?
+- BONUS: View the details of the top 5 highest spend orders
+
+```sql
+with top_5_orders as (
+	select
+		order_id,
+		sum(price)
+	from order_details a
+	left join menu_items b
+	on a.item_id = b.menu_item_id
+	group by 1
+	order by 2 desc
+	limit 5
+)
+
+select 
+    * 
+from order_details a
+inner join menu_items b
+on a.item_id = b.menu_item_id
+where order_id in (select order_id from top_5_orders);
+```
+
+## Links to the project
+
+[GitHub project repo](https://github.com/dhiraj-das/restaurant-orders-analysis)
