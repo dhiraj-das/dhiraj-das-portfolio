@@ -14,6 +14,13 @@ const projectsData: Project[] = [
     imgSrc: '/static/images/restaurant-order-sql.png',
     href: '/blog/restaurant-order-analysis',
   },
+  {
+    title: 'HR Survey Analysis',
+    description: `An analysis of HR survey response data from ~1,500 city employees 
+    in Washington state using MS Excel to visualize the response data and derive actionable insights`,
+    imgSrc: '/static/images/HR-survey-feature.jpg',
+    href: '/blog/hr-survey-analysis',
+  },
 ]
 
 export default projectsData

@@ -1,0 +1,103 @@
+---
+title: 'HR Survey Analysis'
+date: '2024-10-23'
+lastmod: '2024-10-23'
+tags: ['excel', 'data-analysis']
+draft: false
+summary: 'An analysis of HR survey response data from ~1,500 city employees in Washington state using MS Excel to visualize the response data and derive actionable insights'
+---
+
+## Introduction
+
+This is my solution to a guided project by Maven Analytics which consisted of a HR survey response dataset from ~1,500 city employees in Washington state. The challenge was to analyse survey response data and derive actionable insights.
+
+## The Tools and Dataset
+
+- [MS Excel](https://www.microsoft.com/en/microsoft-365/excel) - All time favorite tool for quick and dirty data manipulation tasks. Simple, easy to use, and efficient.
+- [Dataset]() - The data came in the form of an excel workbook. The first sheet was the survey response and the second sheet consisted of a data dictionary outlining the data fields.
+
+## Basic exploratory data analysis of the data
+
+Before diving into the project objectives, I wanted to perform a quick and dirty EDA of the data to get a preliminary overview of how the data looks like -
+- The dataset has 14,725 rows + 1 header row and 10 columns
+- The 'Response' and 'Response Text' column had blanks - we may have to address this later.
+- Also, the questions column has some issue because of which there seems to be 2 versions for Question 7
+
+## Objective 1 - Profile & QA the data
+
+The first objective was to explore and QA the data by calculating basic profiling metrics, removing blank and duplicate records, and standardizing inconsistent text fields. Here are the tasks -
+
+- Calculate the minimum, maximum, count, and number of blanks for each numerical field
+
+![Data Profiling](/static/images/blog/hr-survey-analysis-1.png)
+There are several observations that come out of this -
+1. While there are 14725 records for the Response ID field, the maximum value is only 14710. This means there are duplicates in this column
+2. On a similar note, the Response and Response Text fields have 135 blank values.
+
+- Remove any records with blank responses
+
+![Data Cleaning](/static/images/blog/hr-survey-analysis-2.png)
+
+- Remove any records containing duplicate values across all fields
+
+![Data Cleaning](/static/images/blog/hr-survey-analysis-3.png)
+
+- Calculate the count or frequency of each value in the Department and Question fields, and standardize any inconsistencies you find
+
+To analyse both the department and question fields, it will be best to create a pivot table with these columns and their row counts. The department field didn't look to have any any data quality issues. However, it was observed that the question field had two entries in Q7 and Q10. While it was obvious why Q7 was showing two entries (two versions with '&' and 'and'), it was not so obvious for Q10. On close inspection, the duplicate entry for Q10 was because of a trailing space. 
+![Data Cleaning](/static/images/blog/hr-survey-analysis-4.png)
+
+Lets fix these issues -
+1. The first issue (Q7) can be fixed by simply using find and replace and searching for "at work to learn & grow" and replacing it with "at work to learn and grow".
+2. The second one was also fixed using find and replace and searching for "satisfied with my job " and replacing it with "satisfied with my job".
+
+After refreshing our pivot table, we can see that the issues are no longer present.
+![Data Cleaning](/static/images/blog/hr-survey-analysis-5.png)
+
+## Objective 2 - Prepare the data for visualization
+
+The second objective was to produce clean source data for visualization by calculating response frequencies and proportions for each of the 10 survey questions. Lets begin!
+
+- Create a new tab named Chart Source, and generate a unique list of survey questions
+
+![Survey Questions](/static/images/blog/hr-survey-analysis-6.png)
+
+- For each question, calculate the count of records associated with each response type (1-4) and the average response, excluding zeros
+
+![Survey Questions](/static/images/blog/hr-survey-analysis-7.png)
+![Survey Questions](/static/images/blog/hr-survey-analysis-8.png)
+
+- Add new columns to convert the counts into percentages, based on the total responses for 1, 2, 3 or 4
+- Copy and paste the data as values, then sort the questions descending by average response
+
+![Survey Questions](/static/images/blog/hr-survey-analysis-9.png)
+
+## Objective 3 - Visualize the data and summarize findings
+
+The final objective was to visualize the data using stacked bar charts and Likert scales, and derive insights and 
+recommendations to share with the HR leadership team based on the findings.
+
+- Visualize the percentages as a 100% stacked bar chart, showing the question with the highest average response at the top
+
+![Survey Visualisation](/static/images/blog/hr-survey-analysis-10.png)
+
+- Update colors to shades of orange or red for negative responses (1,2), and shades of blue for positive responses (3,4)
+- Add data labels and remove the x-axis, title and vertical gridlines, then format individual chart elements to improve readability
+
+![Survey Visualisation](/static/images/blog/hr-survey-analysis-11.png)
+
+- Based on your findings, what insights or recommendations might you bring to the HR leadership team?
+
+There are several insights that come out of the survey results. They have been summarised below -
+1. In terms of task goal orientation, 92% of the workers know what is expected from them in their work.
+2. More than 80% of the workers feel they have someone at work who care about them
+3. On the other hand, there are around 48% i.e. almost half of the workers who felt they don't have a best friend at work.
+4. Similarly, many workers reported (35%) that they didn't recieve any recognition or praise for doing good work.
+
+My recommendations would be the following -
+1. To address the issue of not having a best friend at work, the HR may look at starting a buddy program to foster a culture where the worker can share things with someone from office - not neccessarily on professional front only.
+2. The HR department may also look at introducing a reward program that appreciates workers for their hard work.
+
+- BONUS: Modify the chart to vertically align the bars so that positive responses skew to the right and negative responses skew to the left (you’ll need calculated columns)
+
+![Survey Visualisation](/static/images/blog/hr-survey-analysis-12.png)
