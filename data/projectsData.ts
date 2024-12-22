@@ -7,6 +7,13 @@ interface Project {
 
 const projectsData: Project[] = [
   {
+    title: 'Smallcap Investment Strategy Explorer',
+    description: `A investment strategy explorer built using Streamlit to analyse relative
+    valuation of the NIFTY Smallcap 250 TRI vs the NIFTY 50 TRI to make calculated market entry decisions.`,
+    imgSrc: '/static/images/smallcap.png',
+    href: 'https://smallcap-investment.streamlit.app/home',
+  },
+  {
     title: 'Restaurant Order Analysis',
     description: `An analysis on restaurant orders conducted by using MySQL 
     to analyze order data and identify the most and least popular menu items 
